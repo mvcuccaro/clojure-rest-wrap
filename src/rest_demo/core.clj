@@ -13,19 +13,32 @@
 (defn simple-body-page [req]
   {:status  200
    :headers {"Content-Type" "text/html"}
-   :body    "Hello World"})
+   :body    "Api Running"})
 
 ; request-example
-(defn request-example [req]
-     {:status  200
-      :headers {"Content-Type" "text/html"}
-      :body    (->>
-                (pp/pprint req)
-                (str "Request Object: " req))})
+;; (defn request-example [req] 
+;;      {:status  200
+;;       :headers {"Content-Type" "text/html"}
+;;       :body    (->>
+;;                 (pp/pprint req)
+;;                 (str "Request Object: " req))})
+
+(defn generic-query
+  "Run Query and send back results or send a 500 with error message"
+  [req]
+  (let [ret {:headers {"Content-Type" "text/html"}}]
+    (try
+      (let [data (->> req
+                      (:params)
+                      (:table)
+                      (db/get-many))]
+        (merge ret {:status 200 :body data}))
+      (catch Exception e (merge ret {:status 500 :body (.getMessage e)})))))
 
 (defroutes app-routes
   (GET "/" [] simple-body-page)
-  (GET "/request" [] request-example)
+  ;(GET "/request" [] request-example)
+  (GET "/api/:table" [] generic-query) ;;todo - handle query failure
   (route/not-found "Error, page not found!"))
 
 (defn -main
