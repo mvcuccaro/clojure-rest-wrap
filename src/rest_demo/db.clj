@@ -4,8 +4,8 @@
 
 (def myenv (env))
 
+;;define a db config map from .env file values
 (def db-map
-  "Read .env file and return a db config map"
   (let [{dbuser "dbuser"
          dbpassword "dbpassword"
          db "db"
@@ -18,11 +18,13 @@
      :password dbpassword}))
 
 
-(defn q [query]
+(defn q
   "Get results of a query"
+  [query]
   (sql/query db-map [query]))
 
 
-(defn get-many [table]
-  "Build a query"
+(defn get-many
+  "Build a get query"
+  [table]
   (->> (str "SELECT * FROM " table) q)) ;;todo replace with query builder
