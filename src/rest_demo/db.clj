@@ -1,6 +1,6 @@
 (ns rest-demo.db
   (:require [clojure.java.jdbc :as sql]
-            [dotenv :refer [env app-env]]))
+            [dotenv :refer [env]]))
 
 (def myenv (env))
 

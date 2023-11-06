@@ -3,14 +3,14 @@
             [compojure.core :refer :all]
             [compojure.route :as route]
             [ring.middleware.defaults :refer :all]
-            [clojure.pprint :as pp]
-            [clojure.string :as str]
-            [clojure.data.json :as json]
+            ;[clojure.pprint :as pp]
+            ;[clojure.string :as str]
+            ;[clojure.data.json :as json]
             [rest-demo.db :as db])
   (:gen-class))
 
 ; Simple Body Page
-(defn simple-body-page [req]
+(defn simple-body-page []
   {:status  200
    :headers {"Content-Type" "text/html"}
    :body    "Api Running"})
