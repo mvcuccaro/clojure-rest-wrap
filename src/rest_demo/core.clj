@@ -9,6 +9,8 @@
             [rest-demo.db :as db])
   (:gen-class))
 
+(def last-results (atom []))
+
 ; Simple Body Page
 (defn simple-body-page []
   {:status  200
@@ -32,6 +34,7 @@
                       (:params)
                       (:table)
                       (db/get-many))]
+        (reset! last-results data)
         (merge ret {:status 200 :body (json/write-str data)}))
       (catch Exception e (merge ret {:status 500 :body (.getMessage e)})))))
 
