@@ -36,7 +36,8 @@
                       (db/get-many))]
         (reset! last-results data)
         (merge ret {:status 200 :body (json/write-str data)}))
-      (catch Exception e (merge ret {:status 500 :body (.getMessage e)})))))
+      (catch Exception e 
+        (merge ret {:status 500 :body "Query Failed"})))))
 
 (defroutes app-routes
   (GET "/" [] simple-body-page)

@@ -3,6 +3,8 @@
             [dotenv :refer [env]]))
 
 (def myenv (env))
+;;if theres value in converting the env string keys to real keys
+;;(apply hash-map (map-indexed eokey (into [] cat rest-demo.db/myenv)))
 
 ;;define a db config map from .env file values
 (def db-map
@@ -27,4 +29,5 @@
 (defn get-many
   "Build a get query"
   [table]
-  (->> (str "SELECT * FROM " table) q)) ;;todo replace with query builder
+  {:pre [(or (not (re-find #";|\." table)) (throw (Exception. "Invalid Query")))]}
+  (q (str "SELECT * FROM " table))) ;;todo replace with query builder
