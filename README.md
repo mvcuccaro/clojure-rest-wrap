@@ -1,6 +1,5 @@
-# rest-demo
+### Source code for Clojure rest / backend serving my portfolio site at http://cljs.michaelcuccaro.com
 
-FIXME: description
 
 ## Installation
 
