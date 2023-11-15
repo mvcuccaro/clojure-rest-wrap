@@ -30,4 +30,4 @@
   "Build a get query"
   [table]
   {:pre [(or (not (re-find #";|\." table)) (throw (Exception. "Invalid Query")))]}
-  (q (str "SELECT * FROM " table))) ;;todo replace with query builder
+  (q (str "SELECT * FROM " table " WHERE TRUE"))) ;;todo replace with query builder
