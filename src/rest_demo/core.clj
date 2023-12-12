@@ -28,16 +28,18 @@
 (defn generic-query
   "Run Query and send back results or send a 500 with error message"
   [req]
-  (let [ret {:headers {"Content-Type" "text/"}}]
-    (try
-      (let [data (->> req
-                      (:params)
-                      (:table)
-                      (db/get-many))]
-        (reset! last-results data)
-        (merge ret {:status 200 :body (json/write-str data)}))
-      (catch Exception e 
-        (merge ret {:status 500 :body "Query Failed"})))))
+  (future
+    (println (str (.getName (Thread/currentThread)) "\n"))
+    (let [ret {:headers {"Content-Type" "text/"}}]
+      (try
+        (let [data (->> req
+                        (:params)
+                        (:table)
+                        (db/get-many))]
+          (reset! last-results data)
+          (merge ret {:status 200 :body (json/write-str data)}))
+        (catch Exception e
+          (merge ret {:status 500 :body "Query Failed"}))))))
 
 (defroutes app-routes
   (GET "/" [] simple-body-page)
