@@ -1,15 +1,20 @@
 (ns rest-demo.core
   (:require [org.httpkit.server :as server]
+            [dotenv :refer [env]]
             [compojure.core :refer :all]
             [compojure.route :as route]
             [ring.middleware.defaults :refer :all]
             ;[clojure.pprint :as pp]
             ;[clojure.string :as str]
             [clojure.data.json :as json]
-            [rest-demo.db :as db])
+            [rest-demo.db :as db]
+            [clj-http.client :as client])
   (:gen-class))
 
+(def myenv (env))
+
 (def last-results (atom []))
+
 
 ; Simple Body Page
 (defn simple-body-page []
@@ -41,10 +46,36 @@
         (catch Exception e
           (merge ret {:status 500 :body "Query Failed"}))))))
 
+
+(defn get-docker-repositories
+  "get docker repositories from provided registry"
+  [_]
+  (let [{docker-url "dockerurl"
+         docker-user "dockeruser"
+         docker-password "dockerpassword"} myenv]
+    (:body
+     (client/get
+      docker-url
+      {:basic-auth [docker-user docker-password]
+       :accept :json}))))
+
+(defn get-github-repositories
+  "get github repositories from github url"
+  [_]
+  (let [{github-url "githubreposurl"} myenv]
+    (println github-url)
+    (:body
+     (->>
+      github-url
+      (client/get)))))
+
+
 (defroutes app-routes
   (GET "/" [] simple-body-page)
   ;(GET "/request" [] request-example)
-  (GET "/api/:table" [] generic-query) ;;todo - handle query failure
+  (GET "/api/docker_repositories" [] get-docker-repositories) ;;todo - handle query failure
+  (GET "/api/github_repositories" [] get-github-repositories)
+  (GET "/api/:table" [] generic-query)
   (route/not-found "Error, page not found!"))
 
 (defn -main

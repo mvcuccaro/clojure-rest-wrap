@@ -14,7 +14,8 @@
                  [org.clojure/data.json "0.2.6"]
                   [org.clojure/java.jdbc "0.4.2"]
                  [mysql/mysql-connector-java "5.1.38"]
-                 [lynxeyes/dotenv "1.1.0"]]
+                 [lynxeyes/dotenv "1.1.0"]
+                 [clj-http "3.12.3"]]
   :main ^:skip-aot rest-demo.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
